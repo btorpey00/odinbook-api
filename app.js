@@ -19,6 +19,7 @@ async function main() {
 main().catch((err) => console.log(err));
 
 var indexRouter = require('./routes/index');
+const postRouter = require('./routes/post');
 var usersRouter = require('./routes/users');
 const { mainModule } = require('process');
 
@@ -32,6 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.options('*', cors());
 
 app.use('/', indexRouter);
+app.use('/posts', postRouter);
 app.use('/users', usersRouter);
 
 module.exports = app;

@@ -2,13 +2,13 @@ const Post = require('../models/post');
 const asyncHandler= require('express-async-handler');
 
 exports.post_list = asyncHandler(async(req, res, next) => {
-    const postsByFriends = await Post.find({ user: {$in: currentUser.friends }}).sort({ date: -1 }).limit(20).exec();
-    res.json(posts: postsByFriends)
+    const postsByFriends = await Post.find({ user: {$in: req.currentUser.friends }}).sort({ date: -1 }).limit(20).exec();
+    res.status(201).json(postsByFriends)
 });
 
 exports.get_single_post = asyncHandler(async(req, res, next) => {
-    const post = await Post.findById(req.params.id).exec();
-    res.json({ 'post': post });
+    const post = await Post.findById(req.params.post_id).exec();
+    res.status(201).json(post);
 });
 
 exports.create_post = asyncHandler(async(req, res, next) => {
@@ -22,18 +22,18 @@ exports.create_post = asyncHandler(async(req, res, next) => {
 });
 
 exports.delete_post = asyncHandler(async(req, res, next) => {
-    await Post.findByIdAndRemove(req.params.id);
+    await Post.findByIdAndRemove(req.params.post_id);
     res.status(200).json({ 'message': 'Post removed' });
 });
 
 exports.like_post = asyncHandler(async(req, res, next) => {
-    const post = await Post.findById(req.params.id).exec();
+    const post = await Post.findById(req.params.post_id).exec();
     let newLikeList = [];
-    if (post.likes.includes(req.params.id)) {
-        newLikeList = post.likes.filter(like => like !== currentUser);
+    if (post.likes.includes(req.params.post_id)) {
+        newLikeList = post.likes.filter(like => like !== req.currentUser);
     } else {
-        newLikeList = post.likes.push(currentUser);
+        newLikeList = post.likes.push(req.currentUser);
     }
-    await Post.updateOne( { _id: req.params.id }, {$set: {likes: newLikeList }});
+    await Post.updateOne( { _id: req.params.post_id }, {$set: {likes: newLikeList }});
     res.status(200).json({ 'message': 'Updated likes'})
 });
