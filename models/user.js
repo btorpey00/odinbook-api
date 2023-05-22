@@ -5,11 +5,13 @@ const UserSchema = new Schema({
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
     username: { type: String, required: true },
+    password: { type: String, required: true },
     profile_pic: { type: String },
-    outbound_friend_requests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    inbound_friend_requests: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
-    likes: [{ type: Schema.Types.ObjectId, ref: 'Like' }]
+    outbound_friend_requests: [{ type: Schema.Types.ObjectId, ref: 'User', def: [] }],
+    inbound_friend_requests: [{ type: Schema.Types.ObjectId, ref: 'User', def: [] }],
+    friends: [{ type: Schema.Types.ObjectId, ref: 'User', def: [] }],
+    // posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+    // likes: [{ type: Schema.Types.ObjectId, ref: 'Like' }]
 });
 
 UserSchema.virtual('full_name').get(function() {

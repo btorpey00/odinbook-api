@@ -4,7 +4,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-let cors = require('cors');
+const cors = require('cors');
+
+const User = require('./models/user');
+
 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
